@@ -27,10 +27,23 @@ window.ESCENAS = {
 
   // La solución: el ciclo pasa de 1 simulacro a 8, y la tallerista entra a una pantalla de «Hoy».
   solucion: {
-    async preparar({ lap }) { fijar(lap, e => { e.cuenta = CUENTA(); }); },
+    async preparar({ tel }) {
+      fijar(tel, e => { publicar(e, 14000); e.cuenta = CUENTA(); e.avion = true; e.intento = { simulacro: e.simulacro.numero, i: 3, respuestas: { 0: 1, 1: 2, 2: 1 }, vuelta: 1 }; });
+      await ir(tel, `#/estudiante?c=${CODIGO}`);
+    },
     pasos: [
-      async ({ lap }, lam, H) => H.rotulo(lam, lap, '.a-hero', { dato: '8 simulacros', texto: 'en el ciclo de febrero a agosto. Hoy el colectivo hace 1, en papel.', lado: 'aba', ancho: 520 }),
-      async ({ lap }, lam, H) => H.rotulo(lam, lap, '.a-semana button:first-child', { dato: 'El comité decide', texto: 'la IA propone preguntas entre semana; ninguna llega a un estudiante sin aprobación', lado: 'aba', ancho: 420 })
+      // La pila se apaga y el contador sube de 1 a 8.
+      async (d, lam, H) => {
+        lam.querySelector('.sol-pila').classList.add('fuera');
+        lam.querySelector('.sol-hoy').classList.add('fuera');
+        lam.querySelector('.sol-cnt').classList.add('ver');
+        const el = lam.querySelector('.sol-n'), t0 = performance.now();
+        await new Promise(fin => {
+          const paso = now => { const k = Math.min(1, (now - t0) / 1100); el.textContent = 1 + Math.round(7 * (1 - Math.pow(1 - k, 3))); k < 1 ? requestAnimationFrame(paso) : fin(); };
+          requestAnimationFrame(paso);
+        });
+        lam.querySelector('.sol-cnt').classList.add('listo');
+      }
     ]
   },
 

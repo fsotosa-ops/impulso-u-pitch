@@ -1094,3 +1094,23 @@ body.video .firma, body.video .num-l { display: none; }
 .m-f > span { text-align: right; color: var(--suave-c); font-size: 26px; }
 .m-f > b { text-align: right; color: var(--azul); font-size: 30px; }
 .m-f div b { color: var(--tinta-c); }
+
+/* Solución: la pila de fotocopias se apaga y el contador sube de 1 a 8 junto al celular. */
+#solucion .sol-pila { position: absolute; left: 130px; top: 400px; width: 280px; height: 345px; }
+#solucion .sol-pila .pila { transform: scale(.66); transform-origin: top left; transition: opacity .8s, filter .8s; }
+#solucion .sol-pila.fuera .pila { opacity: .2; filter: grayscale(1); }
+#solucion .sol-hoy { position: absolute; left: 150px; top: 790px; font-size: 22px; color: #C9D6EA; transition: opacity .8s; }
+#solucion .sol-hoy b { font-size: 64px; color: #fff; margin-right: 12px; vertical-align: -8px; }
+#solucion .sol-hoy b, #solucion .sol-hoy { transition: color .8s; }
+#solucion .sol-hoy.fuera, #solucion .sol-hoy.fuera b { color: #4F6A8F; }
+#solucion .sol-fl { position: absolute; left: 480px; top: 560px; font-size: 70px; color: var(--menta); }
+#solucion .sol-cnt { position: absolute; left: 600px; top: 440px; width: 400px; opacity: 0; transition: opacity .4s; }
+#solucion .sol-cnt.ver { opacity: 1; }
+#solucion .sol-cnt b { display: block; font-size: 220px; line-height: .9; font-weight: 700; color: var(--menta); letter-spacing: -.04em; }
+#solucion .sol-cnt span { display: block; font-size: 26px; color: #C9D6EA; margin-top: 10px; }
+#solucion .sol-cnt.listo b { text-shadow: 0 0 60px rgba(105, 221, 198, .55); }
+#solucion .sol-chips { position: absolute; left: 1460px; top: 330px; width: 330px; display: flex; flex-direction: column; gap: 34px; }
+#solucion .sol-chips > div { display: flex; gap: 16px; align-items: flex-start; }
+#solucion .sol-chips i { flex: none; width: 52px; height: 52px; border-radius: 50%; background: var(--menta); color: #0C203D; font-style: normal; font-weight: 800; font-size: 24px; display: flex; align-items: center; justify-content: center; }
+#solucion .sol-chips b { display: block; font-size: 25px; color: #fff; margin-bottom: 4px; }
+#solucion .sol-chips div div { font-size: 19px; line-height: 1.3; color: #C9D6EA; }
