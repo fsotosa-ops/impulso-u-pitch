@@ -1095,22 +1095,22 @@ body.video .firma, body.video .num-l { display: none; }
 .m-f > b { text-align: right; color: var(--azul); font-size: 30px; }
 .m-f div b { color: var(--tinta-c); }
 
-/* Solución: la pila de fotocopias se apaga y el contador sube de 1 a 8 junto al celular. */
-#solucion .sol-pila { position: absolute; left: 130px; top: 400px; width: 280px; height: 345px; }
-#solucion .sol-pila .pila { transform: scale(.66); transform-origin: top left; transition: opacity .8s, filter .8s; }
-#solucion .sol-pila.fuera .pila { opacity: .2; filter: grayscale(1); }
-#solucion .sol-hoy { position: absolute; left: 150px; top: 790px; font-size: 22px; color: #C9D6EA; transition: opacity .8s; }
-#solucion .sol-hoy b { font-size: 64px; color: #fff; margin-right: 12px; vertical-align: -8px; }
-#solucion .sol-hoy b, #solucion .sol-hoy { transition: color .8s; }
-#solucion .sol-hoy.fuera, #solucion .sol-hoy.fuera b { color: #4F6A8F; }
-#solucion .sol-fl { position: absolute; left: 480px; top: 560px; font-size: 70px; color: var(--menta); }
-#solucion .sol-cnt { position: absolute; left: 600px; top: 440px; width: 400px; opacity: 0; transition: opacity .4s; }
-#solucion .sol-cnt.ver { opacity: 1; }
-#solucion .sol-cnt b { display: block; font-size: 220px; line-height: .9; font-weight: 700; color: var(--menta); letter-spacing: -.04em; }
-#solucion .sol-cnt span { display: block; font-size: 26px; color: #C9D6EA; margin-top: 10px; }
-#solucion .sol-cnt.listo b { text-shadow: 0 0 60px rgba(105, 221, 198, .55); }
-#solucion .sol-chips { position: absolute; left: 1460px; top: 330px; width: 330px; display: flex; flex-direction: column; gap: 34px; }
+/* Solución: línea de tiempo de febrero a agosto; hoy 1 simulacro en papel, con Impulso U 8 en el celular. */
+#solucion .sol-tl { position: absolute; left: 140px; top: 470px; width: 880px; }
+#solucion .sol-m { position: relative; height: 34px; margin-left: 230px; margin-right: 90px; }
+#solucion .sol-m span { position: absolute; transform: translateX(-50%); font-size: 18px; color: #8FA6C6; }
+#solucion .sol-row { display: grid; grid-template-columns: 230px 1fr 90px; align-items: center; height: 150px; border-top: 1px solid #2B4B78; }
+#solucion .sol-lb { font-size: 22px; color: #C9D6EA; }
+#solucion .nuevo .sol-lb { color: #fff; font-weight: 700; }
+#solucion .sol-pista { position: relative; height: 40px; }
+#solucion .sol-pista::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; border-top: 2px dashed #2B4B78; }
+#solucion .sol-pista i { position: absolute; top: 50%; transform: translate(-50%, -50%) scale(1.45); line-height: 0; }
+#solucion .sol-pista i.p { opacity: 0; transform: translate(-50%, -20%) scale(1.45); }
+#solucion .sol-pista i.p.ver { opacity: 1; transform: translate(-50%, -50%) scale(1.45); }
+#solucion .sol-tot { font-size: 64px; text-align: right; color: #8FA6C6; }
+#solucion .nuevo .sol-tot { color: var(--menta); }
+#solucion .sol-chips { position: absolute; left: 1470px; top: 330px; width: 330px; display: flex; flex-direction: column; gap: 34px; }
 #solucion .sol-chips > div { display: flex; gap: 16px; align-items: flex-start; }
-#solucion .sol-chips i { flex: none; width: 52px; height: 52px; border-radius: 50%; background: var(--menta); color: #0C203D; font-style: normal; font-weight: 800; font-size: 24px; display: flex; align-items: center; justify-content: center; }
-#solucion .sol-chips b { display: block; font-size: 25px; color: #fff; margin-bottom: 4px; }
+#solucion .sol-chips .n { flex: none; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--menta); color: var(--menta); font-weight: 700; font-size: 21px; display: flex; align-items: center; justify-content: center; }
+#solucion .sol-chips b { display: block; font-size: 24px; color: #fff; margin-bottom: 4px; }
 #solucion .sol-chips div div { font-size: 19px; line-height: 1.3; color: #C9D6EA; }

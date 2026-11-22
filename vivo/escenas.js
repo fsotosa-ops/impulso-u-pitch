@@ -31,20 +31,7 @@ window.ESCENAS = {
       fijar(tel, e => { publicar(e, 14000); e.cuenta = CUENTA(); e.avion = true; e.intento = { simulacro: e.simulacro.numero, i: 3, respuestas: { 0: 1, 1: 2, 2: 1 }, vuelta: 1 }; });
       await ir(tel, `#/estudiante?c=${CODIGO}`);
     },
-    pasos: [
-      // La pila se apaga y el contador sube de 1 a 8.
-      async (d, lam, H) => {
-        lam.querySelector('.sol-pila').classList.add('fuera');
-        lam.querySelector('.sol-hoy').classList.add('fuera');
-        lam.querySelector('.sol-cnt').classList.add('ver');
-        const el = lam.querySelector('.sol-n'), t0 = performance.now();
-        await new Promise(fin => {
-          const paso = now => { const k = Math.min(1, (now - t0) / 1100); el.textContent = 1 + Math.round(7 * (1 - Math.pow(1 - k, 3))); k < 1 ? requestAnimationFrame(paso) : fin(); };
-          requestAnimationFrame(paso);
-        });
-        lam.querySelector('.sol-cnt').classList.add('listo');
-      }
-    ]
+    pasos: []
   },
 
   // Entre semana: el banco es del colectivo; la IA propone y el comité decide.
