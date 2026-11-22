@@ -2,7 +2,7 @@ import { estado } from './estado.js';
 import { ic, esc, GRUPO, CICLO, toast } from './ui.js';
 import { activosHoy, aciertosPorArea, AUTORIZACIONES } from './grupo.js';
 
-// Lo que recibe el aliado que financia (la extensión universitaria): totales del grupo, sin nombres.
+// Lo que recibe el municipio que paga: totales del grupo, sin nombres.
 // Regla: solo se reportan grupos de 10 estudiantes o más, para que nadie sea reconocible.
 export function reporte(el) {
   const aplicados = CICLO.filter(s => s.respondieron).length + (estado.simulacro.publicado ? 1 : 0);
@@ -10,7 +10,7 @@ export function reporte(el) {
   const pctActivos = Math.round(100 * activosHoy() / GRUPO.inscritos);
   el.innerHTML = `
   <div class="titulo">
-    <div><h1>Reporte al aliado</h1><p class="sub">Lo que recibe el municipio que paga el ciclo · semana ${GRUPO.semana} de ${GRUPO.semanas}</p></div>
+    <div><h1>Reporte al municipio</h1><p class="sub">Lo que recibe el municipio que paga el ciclo · semana ${GRUPO.semana} de ${GRUPO.semanas}</p></div>
     <button class="btn primario" data-acc="enviar">${ic('descarga', 16)} Enviar reporte</button>
   </div>
 
@@ -37,5 +37,5 @@ export function reporte(el) {
       <p class="desc mt">El colectivo es el responsable de los datos; Impulso U los procesa por encargo. Las respuestas por estudiante se borran 6 meses después del examen y este reporte queda.</p>
     </div>
   </div>`;
-  el.querySelector('[data-acc="enviar"]').addEventListener('click', () => toast('Reporte enviado al aliado'));
+  el.querySelector('[data-acc="enviar"]').addEventListener('click', () => toast('Reporte enviado al municipio'));
 }

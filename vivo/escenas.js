@@ -29,8 +29,8 @@ window.ESCENAS = {
   solucion: {
     async preparar({ lap }) { fijar(lap, e => { e.cuenta = CUENTA(); }); },
     pasos: [
-      async ({ lap }, lam, H) => H.rotulo(lam, lap, '.linea-ciclo', { dato: '8 simulacros', texto: 'en el ciclo de febrero a agosto. Hoy el colectivo hace 1, en papel.', lado: 'arr', dy: -10, ancho: 520 }),
-      async ({ lap }, lam, H) => H.rotulo(lam, lap, '.atajos .card:first-child', { dato: el => numero(el.querySelector('b')), texto: 'preguntas que propuso la IA esperan al comité del colectivo', lado: 'izq', ancho: 380 })
+      async ({ lap }, lam, H) => H.rotulo(lam, lap, '.a-hero', { dato: '8 simulacros', texto: 'en el ciclo de febrero a agosto. Hoy el colectivo hace 1, en papel.', lado: 'aba', ancho: 520 }),
+      async ({ lap }, lam, H) => H.rotulo(lam, lap, '.a-semana button:first-child', { dato: 'El comité decide', texto: 'la IA propone preguntas entre semana; ninguna llega a un estudiante sin aprobación', lado: 'aba', ancho: 420 })
     ]
   },
 

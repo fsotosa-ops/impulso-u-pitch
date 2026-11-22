@@ -787,7 +787,7 @@ body.video .firma, body.video .num-l { display: none; }
 .pruebas-t .pend b { font-size: 52px; }
 
 /* ---------- Referencias */
-.refs { margin-top: 14px; padding-left: 30px; columns: 2; column-gap: 50px; font-size: 13.5px; line-height: 1.32; color: #33465F; max-height: 790px; }
+.refs { margin-top: 14px; padding-left: 34px; columns: 2; column-gap: 56px; font-size: 17px; line-height: 1.32; color: #33465F; max-height: 790px; }
 .refs li { break-inside: avoid; margin-bottom: 7px; overflow-wrap: anywhere; }
 .fuente { color: #A9BBD6; }
 
@@ -1032,3 +1032,7 @@ body.video .firma, body.video .num-l { display: none; }
 .me-f small { font-size: 18px; color: #C9D6EA; grid-column: 1; }
 .me-f.nuestro .me-n, .me-f.nuestro b { color: #0C203D; }
 .me-f.nuestro small { color: #0C203D; }
+
+.req-12 { display: grid; grid-template-columns: repeat(6, 18px); gap: 6px; margin-top: 12px; }
+.req-12 i { width: 18px; height: 18px; border: 2px solid var(--menta); border-radius: 3px; }
+.req-12 i.si { background: var(--menta); }
