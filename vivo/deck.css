@@ -1059,3 +1059,19 @@ body.video .firma, body.video .num-l { display: none; }
 .preg-c > div { font-size: 26px; color: #E3EDFF; }
 .preg-c > div span { font-size: 20px; font-weight: 700; color: var(--menta); letter-spacing: .04em; text-transform: uppercase; }
 .preg-c > div b { display: inline-block; width: 36px; height: 36px; line-height: 36px; border-radius: 50%; background: var(--menta); color: #0C203D; text-align: center; margin-right: 14px; font-size: 20px; }
+
+/* Mercado: dónde empezamos, revelado por clic. */
+.dondeM { display: flex; flex-direction: column; gap: 16px; margin-top: 34px; }
+.dondeM > div { border-left: 4px solid var(--menta); padding-left: 18px; }
+.dondeM span { display: block; font-size: 18px; font-weight: 700; color: var(--menta); letter-spacing: .04em; text-transform: uppercase; }
+.dondeM b { font-size: 44px; letter-spacing: -.02em; color: #fff; margin-right: 12px; }
+.dondeM small { font-size: 20px; color: #C9D6EA; }
+/* Solución en espejo: cada causa del problema con su respuesta, una por clic. */
+.esp { margin-top: 46px; display: flex; flex-direction: column; gap: 18px; }
+.esp-h, .esp-f { display: grid; grid-template-columns: 1fr 90px 1fr; align-items: center; }
+.esp-h span { font-size: 19px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #8FA6C6; }
+.esp-h span:last-child { color: var(--menta); }
+.esp-c { font-size: 27px; line-height: 1.3; color: #C9D6EA; border-top: 2px solid #2B4B78; padding-top: 16px; }
+.esp-r { font-size: 27px; line-height: 1.3; color: #fff; border-top: 2px solid var(--menta); padding-top: 16px; }
+.esp-c b { color: #fff; } .esp-r b { color: var(--menta); }
+.esp-a { font-size: 40px; color: var(--menta); text-align: center; }
