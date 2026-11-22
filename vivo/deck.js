@@ -6,6 +6,8 @@
 // Teclas: → espacio PageDown clic = adelante · ← PageUp = atrás · P = presentador · N = número · Inicio / Fin.
 (() => {
   const APP = '../app/index.html';
+  // Modo informe (body.informe): todas las láminas quedan abiertas a la vez, con todos sus pasos, dentro de páginas para imprimir.
+  const INFORME = document.body.classList.contains('informe');
   const laminas = [...document.querySelectorAll('section.lam')];
   const ids = laminas.map(l => l.id);
   const canal = new BroadcastChannel('impulso-u-deck');
@@ -13,6 +15,7 @@
   const espera = ms => new Promise(r => setTimeout(r, ms));
 
   function ajustar() {
+    if (INFORME) return;
     S = Math.min(innerWidth / 1920, innerHeight / 1080);
     document.body.style.transform = `translate(${(innerWidth - 1920 * S) / 2}px, ${(innerHeight - 1080 * S) / 2}px) scale(${S})`;
   }
@@ -171,9 +174,9 @@
     lam.classList.remove('ver');
     // Reinicia las animaciones de entrada
     lam.classList.remove('activa'); void lam.offsetWidth; lam.classList.add('activa');
-    if (antes && antes !== lam) setTimeout(() => { antes.classList.remove('activa'); antes.querySelectorAll('[data-app] iframe').forEach(f => f.remove()); }, 450);
+    if (antes && antes !== lam && !INFORME) setTimeout(() => { antes.classList.remove('activa'); antes.querySelectorAll('[data-app] iframe').forEach(f => f.remove()); }, 450);
     lam.querySelectorAll('.num-l').forEach(e => { e.textContent = `${i + 1} / ${ids.length}`; });
-    history.replaceState(null, '', `#${i + 1}`);
+    if (!INFORME) history.replaceState(null, '', `#${i + 1}`);
     const esc = window.ESCENAS?.[lam.dataset.escena];
     lam._apps = await montar(lam);
     if (esc?.preparar) await esc.preparar(lam._apps, lam, H);
@@ -235,5 +238,11 @@
   window.__deck = { ids, total: ids.length, ir: (n, todos = true) => mostrar(n, todos), ocupado: () => ocupado };
   ajustar();
   const ini = parseInt(location.hash.slice(1), 10);
-  mostrar(Number.isFinite(ini) ? ini - 1 : 0);
+  if (INFORME) {
+    (async () => {
+      for (let n = 0; n < ids.length; n++) { await mostrar(n, true); await espera(250); }
+      await espera(1500);
+      document.body.classList.add('listo');
+    })();
+  } else mostrar(Number.isFinite(ini) ? ini - 1 : 0);
 })();

@@ -787,7 +787,7 @@ body.video .firma, body.video .num-l { display: none; }
 .pruebas-t .pend b { font-size: 52px; }
 
 /* ---------- Referencias */
-.refs { margin-top: 14px; padding-left: 30px; columns: 2; column-gap: 50px; font-size: 14.5px; line-height: 1.38; color: #33465F; }
+.refs { margin-top: 14px; padding-left: 30px; columns: 2; column-gap: 50px; font-size: 13.5px; line-height: 1.32; color: #33465F; max-height: 790px; }
 .refs li { break-inside: avoid; margin-bottom: 7px; overflow-wrap: anywhere; }
 .fuente { color: #A9BBD6; }
 
@@ -982,3 +982,53 @@ body.video .firma, body.video .num-l { display: none; }
 .ex-ley { display: flex; gap: 30px; margin-top: 14px; font-size: 18px; color: var(--suave-c); }
 .ex-ley i { display: inline-block; width: 16px; height: 16px; border-radius: 4px; margin-right: 8px; vertical-align: -2px; }
 .ex-ley i.r { background: #FDECEA; outline: 2px solid #E06A5F; } .ex-ley i.f { background: #E3F7F1; outline: 2px solid #0E6B53; }
+
+/* Anexo del plan */
+.hilo-fin ol li { white-space: nowrap; }
+.ob-gen { background: var(--sup-o); color: #fff; border-radius: 22px; padding: 22px 28px; margin-top: 16px; }
+.ob-gen > span { font-size: 15px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--menta); }
+.ob-gen > b { display: block; font-size: 25px; line-height: 1.3; margin: 6px 0 12px; font-weight: 600; }
+.ob-gen > b em { font-style: normal; color: var(--menta); font-weight: 700; }
+.ob-smart { display: flex; gap: 10px; } .ob-smart i { font-style: normal; font-size: 15px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid var(--menta); color: var(--menta); }
+.ob-esp-t { margin: 20px 0 8px; font-size: 17px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--azul); }
+.ob-esp { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+.ob-esp li { display: grid; grid-template-columns: 40px 1fr 230px; align-items: center; gap: 16px; background: #fff; border-radius: 14px; padding: 10px 18px; box-shadow: 0 6px 18px rgba(16,33,58,.06); }
+.ob-n { width: 32px; height: 32px; border-radius: 50%; background: var(--azul); color: #fff; display: grid; place-items: center; font-weight: 700; }
+.ob-esp b { display: block; font-size: 20px; color: var(--tinta-c); } .ob-esp div span { font-size: 17px; color: #5A6B82; }
+.ob-esp em { font-style: normal; font-weight: 700; color: var(--azul); font-size: 19px; text-align: right; }
+.met { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 18px; }
+.met-c { background: #fff; border-radius: 22px; padding: 22px 26px; box-shadow: 0 10px 30px rgba(16,33,58,.07); font-size: 17px; color: #5A6B82; }
+.met-c p { margin: 12px 0 0; line-height: 1.4; }
+.met-t { font-size: 16px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--azul); margin-bottom: 12px; }
+.mfases { display: flex; align-items: stretch; gap: 6px; }
+.mf { flex: 1; background: #EEF3FB; border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 2px; }
+.mf b { font-size: 16px; color: var(--tinta-c); } .mf span { font-size: 14px; color: var(--azul); font-weight: 700; } .mf small { font-size: 13px; line-height: 1.25; }
+.mf:first-child { background: #E3F7F1; }
+.mc { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--ambar-o); font-size: 20px; width: 54px; text-align: center; }
+.mc small { font-size: 11px; color: var(--ambar-t); line-height: 1.1; font-weight: 700; }
+.mroles { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 18px; }
+.mroles span { font-size: 15px; } .mroles b { display: block; font-size: 16px; color: var(--tinta-c); }
+.dsr { list-style: none; margin: 0; padding: 0; counter-reset: d; display: flex; flex-direction: column; gap: 7px; }
+.dsr li { counter-increment: d; display: grid; grid-template-columns: 34px 220px 1fr; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 12px; background: #F3F5F9; }
+.dsr li::before { content: counter(d); width: 26px; height: 26px; border-radius: 50%; background: #D5DEEB; color: #fff; display: grid; place-items: center; font-weight: 700; font-size: 14px; }
+.dsr li.hecho { background: #E3F7F1; } .dsr li.hecho::before { background: #0E6B53; }
+.dsr li.medio { background: #EEF3FB; } .dsr li.medio::before { background: var(--azul); }
+.dsr b { font-size: 17px; color: var(--tinta-c); } .dsr span { font-size: 15px; }
+.dsr-ley { display: flex; gap: 18px; margin-top: 10px; font-size: 14px; }
+.dsr-ley i { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; background: #D5DEEB; vertical-align: -1px; }
+.dsr-ley i.hecho { background: #0E6B53; } .dsr-ley i.medio { background: var(--azul); }
+.ent { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 26px; }
+.en { background: #fff; border-radius: 20px; padding: 22px 24px; box-shadow: 0 10px 30px rgba(16,33,58,.07); border-top: 5px solid var(--azul); display: flex; flex-direction: column; gap: 6px; }
+.en em { font-style: normal; font-weight: 700; font-size: 18px; color: var(--azul); } .en b { font-size: 25px; color: var(--tinta-c); } .en span { font-size: 18px; color: #5A6B82; line-height: 1.35; }
+
+/* Mercado como presupuesto del pagador (21-nov-2026): embudo centrado, etapas y no escala */
+.mer-e { display: grid; gap: 8px; margin-top: 18px; justify-items: center; }
+.me-f { width: var(--w); min-width: 560px; display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 24px;
+  background: #22406B; border-radius: 14px; padding: 12px 28px; }
+.me-f.nuestro { background: var(--menta); }
+.me-f .me-b { display: none; }
+.me-n { font-size: 25px; font-weight: 700; color: #fff; }
+.me-f b { font-size: 30px; color: #fff; grid-row: 1 / 3; grid-column: 2; }
+.me-f small { font-size: 18px; color: #C9D6EA; grid-column: 1; }
+.me-f.nuestro .me-n, .me-f.nuestro b { color: #0C203D; }
+.me-f.nuestro small { color: #0C203D; }

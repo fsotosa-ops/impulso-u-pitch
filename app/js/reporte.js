@@ -10,7 +10,7 @@ export function reporte(el) {
   const pctActivos = Math.round(100 * activosHoy() / GRUPO.inscritos);
   el.innerHTML = `
   <div class="titulo">
-    <div><h1>Reporte al aliado</h1><p class="sub">Lo que recibe la extensión universitaria que financia el ciclo · semana ${GRUPO.semana} de ${GRUPO.semanas}</p></div>
+    <div><h1>Reporte al aliado</h1><p class="sub">Lo que recibe el municipio que paga el ciclo · semana ${GRUPO.semana} de ${GRUPO.semanas}</p></div>
     <button class="btn primario" data-acc="enviar">${ic('descarga', 16)} Enviar reporte</button>
   </div>
 

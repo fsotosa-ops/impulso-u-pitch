@@ -17,7 +17,7 @@ const RUTAS = { '': enWeb('hoy'), preparar: enWeb('preparar'), aplicar: enWeb('a
 const SECCIONES = {
   preparar: [['preparar', 'Revisar'], ['crear', 'Sumar con IA, foto o Icfes'], ['simulacros', 'Armar el simulacro'], ['banco', 'Todo el banco']],
   aplicar: [['aplicar', 'El simulacro de hoy'], ['hojas', 'Hojas en papel']],
-  acompanar: [['acompanar', 'Esta semana'], ['grupo', 'El grupo en detalle'], ['reporte', 'Reporte para la universidad']]
+  acompanar: [['acompanar', 'Esta semana'], ['grupo', 'El grupo en detalle'], ['reporte', 'Reporte para el municipio']]
 };
 const seccionDe = r => r === '' ? 'hoy' : Object.keys(SECCIONES).find(k => SECCIONES[k].some(([id]) => id === r)) || 'hoy';
 
