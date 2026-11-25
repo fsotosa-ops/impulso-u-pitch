@@ -209,36 +209,55 @@ window.ESCENAS = {
 
   // ---------- Video de la demo: una escena por momento de la semana. grabar_video.py dispara los pasos con la voz.
   // ---------- Video de la demo: los cinco pasos de la solución (demo/prompt-solucion-impulsou.md).
-  vDiagnostico: {
-    async preparar({ tel, lap }, lam) {
-      // Simulacro 1 = el diagnóstico. Laura ya va en la pregunta 9 de 10.
-      fijar(lap, e => {
-        e.cuenta = CUENTA(); e.simulacro = { ...e.simulacro, numero: 1 }; publicar(e, 600000);
-        e.servidor = []; e.cola = []; e.avion = false;
-        const ids = e.simulacro.ids;
-        e.intento = { simulacro: 1, i: ids.length - 2, respuestas: Object.fromEntries(ids.slice(0, -2).map(id => [id, 0])), vuelta: 1 };
-      });
-      await recargar(tel); await recargar(lap);
+  vEstudiante: {
+    async preparar({ tel }, lam) {
+      // Simulacro 1 = el diagnóstico, publicado. Laura todavía no entra.
+      fijar(tel, e => { e.cuenta = CUENTA(); e.simulacro = { ...e.simulacro, numero: 1 }; publicar(e, 600000); e.servidor = []; e.cola = []; e.avion = false; e.intento = null; });
+      await recargar(tel);
       await ir(tel, `#/estudiante?c=${CODIGO}`, 500);
-      if (tel.doc.querySelector('[data-c="entrar"]')) tel.doc.querySelector('[data-c="entrar"]').click();
-      await ir(lap, '#/hojas', 300);
       mirar(lam, 'estudiante');
     },
     pasos: [
       async ({ tel }, lam, H) => {
-        for (let q = 0; q < 2; q++) {
-          await H.clic(lam, tel, '[data-r="1"]', 250);
-          tel.doc.querySelector('[data-c="sig"]')?.click();
-          await H.espera(300);
-        }
-        await H.espera(300);
-        H.rotulo(lam, tel, 'p b', { texto: 'Laura lo responde en su celular.', lado: 'der', ancho: 300 });
+        await H.clic(lam, tel, '[data-c="entrar"]', 450);
+        await H.espera(400);
+        H.rotulo(lam, tel, '[data-c="empezar"]', { texto: 'Entra solo con el código de su grupo: el simulacro queda en el celular.', lado: 'der', ancho: 380 });
       },
+      async ({ tel }, lam, H) => {
+        await H.clic(lam, tel, '[data-c="empezar"]', 350);
+        const ids = tel.win.__app.estado().simulacro.ids;
+        const marcar = async (q, lento) => {
+          const c = tel.win.__app.pregunta(ids[q]).clave;
+          const r = [1, 3, 4, 6, 8].includes(q) ? (c + 1) % 4 : c;  // acierta 5 de 10
+          if (lento) await H.clic(lam, tel, `[data-r="${r}"]`, 300); else tel.doc.querySelector(`[data-r="${r}"]`)?.click();
+          await H.espera(lento ? 350 : 140);
+          tel.doc.querySelector('[data-c="sig"]')?.click();
+          await H.espera(lento ? 300 : 140);
+        };
+        await marcar(0, true);
+        H.rotulo(lam, tel, '.cel-pie', { texto: 'Responde pregunta por pregunta, como en el Saber 11.', lado: 'der', ancho: 360 });
+        for (let q = 1; q < ids.length - 1; q++) await marcar(q, false);
+      },
+      async ({ tel }, lam, H) => {
+        const ids = tel.win.__app.estado().simulacro.ids, q = ids.length - 1;
+        await H.clic(lam, tel, `[data-r="${tel.win.__app.pregunta(ids[q]).clave}"]`, 300);
+        await H.clic(lam, tel, '[data-c="sig"]', 350);
+        await H.espera(400);
+        H.rotulo(lam, tel, '.res-area', { texto: 'Al entregar ve en el acto sus aciertos por área y qué repasar.', lado: 'der', ancho: 360 });
+      }
+    ]
+  },
+  vPapel: {
+    async preparar({ lap }) {
+      fijar(lap, e => { e.cuenta = CUENTA(); e.simulacro = { ...e.simulacro, numero: 1 }; publicar(e, 600000); e.servidor = []; });
+      await recargar(lap);
+      await ir(lap, '#/hojas', 500);
+    },
+    pasos: [
       async ({ lap }, lam, H) => {
-        mirar(lam, 'tallerista');
         await H.clic(lam, lap, '[data-acc="foto"]', 450);
         await H.espera(300);
-        H.rotulo(lam, lap, '.lectura', { dato: el => lap.doc.querySelector('.hoja .etiqueta')?.textContent.replace('Confianza ', '') || '', texto: 'de confianza: el OCR lee las marcas de la hoja en papel.', lado: 'aba', ancho: 380 });
+        H.rotulo(lam, lap, '.lectura', { dato: el => lap.doc.querySelector('.hoja .etiqueta')?.textContent.replace('Confianza ', '') || '', texto: 'de confianza: el OCR lee las marcas de la hoja en papel.', lado: 'der', ancho: 360, dx: -60, dy: 120 });
       }
     ]
   },
