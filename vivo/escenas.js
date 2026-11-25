@@ -174,7 +174,7 @@ window.ESCENAS = {
   modelo: {
     async preparar({ lap }) { fijar(lap, e => { e.cuenta = CUENTA(); publicar(e, 3600000); }); await ir(lap, '#/reporte', 600); },
     pasos: [
-      async ({ lap }, lam, H) => H.rotulo(lam, lap, '.grilla.g3 .card:nth-child(2) .cifra', { dato: el => texto(el), texto: 'siguen activos: la cobertura medida que la universidad reporta en su proyección social', lado: 'aba', ancho: 420 }),
+      async ({ lap }, lam, H) => H.rotulo(lam, lap, '.grilla.g3 .card:nth-child(2) .cifra', { dato: el => texto(el), texto: 'siguen activos: el avance que el municipio reporta en su indicador del plan de desarrollo', lado: 'aba', ancho: 420 }),
       async ({ lap }, lam, H) => H.rotulo(lam, lap, '.excluye', { texto: 'Sin nombres ni respuestas individuales, y solo grupos de 10 o más.', lado: 'aba', ancho: 400 })
     ]
   },
