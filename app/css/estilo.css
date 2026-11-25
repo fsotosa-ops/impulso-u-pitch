@@ -524,3 +524,21 @@ img.logo { background: none !important; border-radius: 50% !important; display: 
 .a-web .a-codigo b { font-size: 48px; }
 .a-web .a-personas b { font-size: 17px; }
 .a-web .a-btn.sec { max-width: 360px; }
+
+/* ---------- La clase del sábado */
+.cl-tema { font-size: 24px !important; margin: 10px 0 12px; }
+.cl-motivo p { margin-top: 3px; color: var(--navy); }
+.cl-bloque { margin-top: 14px; }
+.cl-bloque p { margin-top: 3px; }
+.cl-act ol { list-style: none; margin-top: 6px; display: grid; gap: 6px; counter-reset: act; }
+.cl-act li { display: flex; gap: 10px; align-items: center; background: var(--fondo); border-radius: 10px; padding: 8px 12px; counter-increment: act; }
+.cl-act li::before { content: counter(act); width: 22px; height: 22px; border-radius: 50%; background: var(--azul); color: #fff; font-size: 12px; font-weight: 700; display: grid; place-items: center; flex: none; }
+.cl-act li span { flex: 1; }
+.cl-act li em { font-style: normal; font-size: 13px; color: var(--gris); }
+.cl-ruta { list-style: none; margin-top: 12px; display: grid; gap: 8px; }
+.cl-ruta li { display: flex; gap: 10px; align-items: flex-start; background: #fff; border: 1px solid var(--borde); border-radius: 10px; padding: 8px 10px; }
+.cl-ruta li b { display: block; font-size: 14px; font-weight: 600; }
+.cl-ruta .n { width: 24px; height: 24px; border-radius: 50%; background: #EEF2F7; color: var(--gris); font-size: 12px; font-weight: 700; display: grid; place-items: center; flex: none; }
+.cl-ruta li.ahora { border-color: var(--azul); box-shadow: 0 0 0 2px var(--suave-2); }
+.cl-ruta li.ahora .n { background: var(--azul); color: #fff; }
+.cl-ruta li.hecha { opacity: .6; }

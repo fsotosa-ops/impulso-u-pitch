@@ -13,6 +13,16 @@ const recargar = app => app.win.__app.recargar();
 const ir = async (app, hash, ms = 500) => { app.win.location.hash = hash; await new Promise(r => setTimeout(r, ms)); };
 const publicar = (e, haceMs = 0) => { e.simulacro = { ...e.simulacro, codigo: CODIGO, publicado: Date.now() - haceMs }; };
 const texto = el => el.textContent.trim();
+// Video de la demo: marca quién está en pantalla y atenúa el celular de quien no actúa.
+const VE = { tallerista: 'Lo que ve la tallerista · Andrea', estudiante: 'Lo que ve la estudiante · Laura' };
+function mirar(lam, quien) {
+  const p = lam.querySelector('.ve-pill');
+  if (p) { p.dataset.ve = quien; p.textContent = VE[quien]; }
+  const otro = quien === 'tallerista' ? 'tel' : 'and';
+  lam.querySelectorAll('[data-app]').forEach(d => d.classList.toggle('apagado', d.dataset.app === otro));
+  const rot = [...lam.querySelectorAll('.quien-dev')];
+  if (rot.length === 2) rot.forEach((r, k) => r.classList.toggle('apagado', (k === 1) === (quien === 'tallerista')));
+}
 const numero = el => (el.textContent.match(/\d[\d.,]*/) || [''])[0];
 
 window.ESCENAS = {
@@ -80,9 +90,9 @@ window.ESCENAS = {
         const n = tel.win.__app.estado().simulacro.ids.length;
         for (let q = 0; q < n; q++) {
           tel.doc.querySelector(`[data-r="${q % 4 === 1 ? 2 : 1}"]`)?.click();
-          await H.espera(70);
+          await H.espera(200);
           tel.doc.querySelector('[data-c="sig"]')?.click();
-          await H.espera(90);
+          await H.espera(250);
         }
         await H.espera(300);
         H.rotulo(lam, tel, '.sync', { dato: 'Sin señal', texto: 'Terminó igual: sus respuestas quedan guardadas en el celular.', lado: 'izq', ancho: 360 });
@@ -199,27 +209,43 @@ window.ESCENAS = {
   },
 
   // ---------- Video de la demo: una escena por momento de la semana. grabar_video.py dispara los pasos con la voz.
-  vPreparar: {
-    async preparar({ lap }) { fijar(lap, e => { e.cuenta = CUENTA(); e.simulacro.publicado = null; }); await ir(lap, '#/', 600); },
+  vDiagnosticar: {
+    async preparar({ lap }) { fijar(lap, e => { e.cuenta = CUENTA(); publicar(e, 3600000); }); await ir(lap, '#/grupo', 600); },
     pasos: [
-      async ({ lap }, lam, H) => H.rotulo(lam, lap, '.a-semana', { texto: 'Su semana en tres momentos: preparar, aplicar y acompañar.', lado: 'aba', ancho: 420 }),
+      async ({ lap }, lam, H) => H.rotulo(lam, lap, '.barras .r.bajo', { dato: el => `${numero(el.querySelector('.v'))} %`, texto: 'de aciertos en Matemáticas: el área más baja, sumando celulares y hojas en papel.', lado: 'der', ancho: 380, dx: 300 })
+    ]
+  },
+  vPlanear: {
+    async preparar({ lap }) { lap.win.__videoRapido = true; fijar(lap, e => { e.cuenta = CUENTA(); e.simulacro.publicado = null; }); await ir(lap, '#/clase', 600); },
+    pasos: [
+      async ({ lap }, lam, H) => H.rotulo(lam, lap, '.cl-motivo', { texto: 'La clase sale del diagnóstico: objetivo, actividades y manejo del grupo.', lado: 'der', ancho: 380, dx: 330 }),
       async ({ lap }, lam, H) => {
-        await ir(lap, '#/preparar', 600);
-        H.rotulo(lam, lap, '.a-chip', { texto: 'La IA propone; el comité del colectivo revisa una por una.', lado: 'der', ancho: 400 });
+        await H.clic(lam, lap, '[data-acc="practica"]', 500);
+        await H.espera(300);
+        await H.clic(lam, lap, '[data-ej="transporte"]', 400);
+        for (let n = 0; n < 60 && !lap.doc.querySelector('.prop-cab'); n++) await H.espera(100);
+        lap.doc.querySelector('.prop-cab')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        await H.espera(700);
+        H.rotulo(lam, lap, '.prop-cab h2', { texto: 'Con la tabla de pasajes del colectivo, la IA propone 4 preguntas de porcentajes.', lado: 'der', ancho: 380, dx: 330 });
       },
       async ({ lap }, lam, H) => {
-        await H.clic(lam, lap, '[data-acc="aprobar"]', 700);
-        await ir(lap, '#/', 600);
-        H.rotulo(lam, lap, '.a-hero', { texto: 'Con las aprobadas, el simulacro del sábado queda listo.', lado: 'der', ancho: 400 });
+        lap.doc.querySelector('.atajos-ia')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        await H.espera(500);
+        await H.clic(lam, lap, '[data-aj="facil"]', 400);
+        lap.doc.querySelector('.prop-cab')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        await H.espera(500);
+        await H.clic(lam, lap, '[data-acc="todas"]', 400);
+        H.rotulo(lam, lap, '[data-acc="guardar"]', { texto: 'Más fácil, con una pista por pregunta. Nada llega al grupo sin aprobación.', lado: 'der', ancho: 360, dx: 60 });
       }
     ]
   },
   vAplicar: {
-    async preparar({ and, tel }) {
-      fijar(and, e => { e.cuenta = null; e.simulacro.publicado = null; e.simulacro.codigo = null; e.intento = null; e.cola = []; e.servidor = []; e.avion = false; });
+    async preparar({ and, tel }, lam) {
+      fijar(and, e => { e.cuenta = CUENTA(); e.simulacro.publicado = null; e.simulacro.codigo = null; e.intento = null; e.cola = []; e.servidor = []; e.avion = false; });
       await recargar(tel);
       await ir(and, '#/andrea?p=aplicar', 500);
       await ir(tel, '#/estudiante', 400);
+      mirar(lam, 'tallerista');
     },
     pasos: [
       async ({ and }, lam, H) => {
@@ -227,43 +253,30 @@ window.ESCENAS = {
         H.rotulo(lam, and, '.a-codigo', { texto: 'Un código para el grupo. Cero fotocopias.', lado: 'izq', ancho: 340 });
       },
       async ({ tel }, lam, H) => {
+        mirar(lam, 'estudiante');
         await recargar(tel);
         await ir(tel, `#/estudiante?c=${CODIGO}`, 500);
-        await H.clic(lam, tel, '[data-c="entrar"]', 350);
-        await H.escribir(tel, '#c-nombre', 'Laura');
-        await H.escribir(tel, '#c-apellido', 'Martínez');
-        await H.escribir(tel, '#c-anio', '2010', 90);
-        tel.doc.querySelector('#c-acepto').checked = true;
-        await H.clic(lam, tel, '[data-c="cuenta"]', 400);
-        await H.espera(300);
-        H.rotulo(lam, tel, '.etiqueta.e-pend', { dato: 'Menor de edad', texto: 'Queda habilitada cuando el colectivo registra el permiso firmado por su familia.', lado: 'der', ancho: 380 });
-      },
-      async ({ tel }, lam, H) => {
-        tel.doc.querySelector('[data-c="autorizar"]')?.click();
-        await H.espera(500);
-        await H.clic(lam, tel, '[data-c="datos"]', 350);
-        await H.espera(300);
-        H.rotulo(lam, tel, '.datos-l', { texto: 'Tus datos: qué se guarda, quién lo ve y cuándo se borra.', lado: 'der', ancho: 360 });
-      },
-      async ({ tel }, lam, H) => {
-        tel.doc.querySelector('[data-c="cerrar-datos"]')?.click();
-        await H.espera(300);
-        await H.clic(lam, tel, '[data-c="empezar"]', 350);
-        await H.clic(lam, tel, '[data-r="1"]', 250);
+        if (tel.doc.querySelector('[data-c="entrar"]')) await H.clic(lam, tel, '[data-c="entrar"]', 350);
+        await H.espera(150);
+        // Laura ya va en la pregunta 7: ahí se va la señal y responde las últimas sin conexión.
+        // Responde con las claves reales y falla 3: termina con 7 de 10, como en el puente de la lámina demo.
+        const ids = tel.win.__app.estado().simulacro.ids, n = ids.length, desde = n - 4;
+        const resp = q => { const c = tel.win.__app.pregunta(ids[q]).clave; return [1, 4, 8].includes(q) ? (c + 1) % 4 : c; };
+        fijar(tel, e => { e.intento = { simulacro: e.simulacro.numero, i: desde, respuestas: Object.fromEntries([...Array(desde).keys()].map(q => [ids[q], resp(q)])), vuelta: 1 }; });
+        await H.espera(250);
         await H.clic(lam, tel, '.barra-estado [data-c="avion"]', 400);
-        const n = tel.win.__app.estado().simulacro.ids.length;
-        for (let q = 0; q < n; q++) {
-          tel.doc.querySelector(`[data-r="${q % 4 === 1 ? 2 : 1}"]`)?.click();
-          await H.espera(70);
+        for (let q = desde; q < n; q++) {
+          tel.doc.querySelector(`[data-r="${resp(q)}"]`)?.click();
+          await H.espera(150);
           tel.doc.querySelector('[data-c="sig"]')?.click();
-          await H.espera(90);
+          await H.espera(180);
         }
         await H.espera(300);
         H.rotulo(lam, tel, '.sync', { dato: 'Sin señal', texto: 'Terminó igual: las respuestas quedan en el celular.', lado: 'der', ancho: 340 });
       },
       async ({ tel, and }, lam, H) => {
         await H.clic(lam, tel, '.barra-estado [data-c="avion"]', 400);
-        await H.espera(1200);
+        await H.espera(700);
         H.rotulo(lam, tel, '.aviso-red', { dato: '0', texto: 'respuestas perdidas al volver la señal', lado: 'der', ancho: 320 });
         await recargar(and);
       }
@@ -275,15 +288,14 @@ window.ESCENAS = {
       await ir(and, '#/andrea?p=acompanar', 600);
     },
     pasos: [
-      async ({ and }, lam, H) => H.rotulo(lam, and, '.a-personas li:first-child', { texto: 'Con nombre y desde cuándo: a quién contactar esta semana.', lado: 'der', ancho: 400 }),
       async ({ and }, lam, H) => {
-        await H.clic(lam, and, '.a-personas li:first-child [data-acc="contactar"]', 500);
-        H.rotulo(lam, and, '.a-personas li:first-child', { texto: 'Contactado antes de que abandone.', lado: 'der', ancho: 360 });
+        await H.clic(lam, and, '.a-personas li:first-child [data-acc="contactar"]', 700);
+        H.rotulo(lam, and, '.a-personas li:first-child', { texto: 'Con nombre: a quién contactar antes de que abandone.', lado: 'der', ancho: 380 });
       },
       async ({ and }, lam, H) => {
         and.doc.querySelector('.a-cuerpo')?.scrollTo({ top: 400, behavior: 'smooth' });
         await H.espera(700);
-        H.rotulo(lam, and, '[data-acc="refuerzo"]', { texto: 'Un toque: la IA arma la práctica de refuerzo de Matemáticas.', lado: 'der', ancho: 400 });
+        H.rotulo(lam, and, '[data-acc="refuerzo"]', { texto: 'Lo que el grupo falló el sábado ajusta la clase 7 del roadmap.', lado: 'der', ancho: 380 });
       }
     ]
   },

@@ -1406,3 +1406,10 @@ svg.sh-lin { position: absolute; left: 740px; top: 300px; overflow: visible; }
 #impacto:has(.ip2-k2.ver) .ip2-ley { opacity: 1; }
 .ip2-ley i { display: inline-block; width: 12px; height: 18px; border-radius: 6px 6px 3px 3px; margin-right: 8px; vertical-align: -2px; background: #5B7096; opacity: .5; }
 .ip2-ley i.hoy { background: #7F93B5; opacity: 1; } .ip2-ley i.mas { background: var(--menta); opacity: 1; }
+
+/* Video de la demo: quién está en pantalla, y el celular que no actúa queda atenuado */
+.ve-pill { position: absolute; right: 140px; top: 112px; padding: 10px 22px; border-radius: 999px; font-size: 22px; font-weight: 700; background: var(--menta); color: var(--sup-o); transition: background .4s, color .4s; }
+.ve-pill[data-ve="estudiante"] { background: var(--azul); color: #fff; }
+.clara .ve-pill[data-ve="tallerista"] { background: var(--sup-o); color: var(--menta); }
+body.video .tel, body.video .quien-dev { transition: opacity .5s, filter .5s; }
+body.video .apagado { opacity: .3; filter: grayscale(.6); }

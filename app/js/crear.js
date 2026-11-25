@@ -67,7 +67,7 @@ function animar(guion, render, desde) {
     s.paso = Math.min(s.pasos.length, desde + k);
     if (k >= guion.length) { s.fase = 'propuesta'; s.paso = s.pasos.length; }
     if (location.hash.startsWith('#/crear')) render();
-    if (k < guion.length) setTimeout(avanzar, reducir ? 0 : 900);
+    if (k < guion.length) setTimeout(avanzar, reducir ? 0 : window.__videoRapido ? 350 : 900);  // en el video del deck, la IA escribe más rápido
   };
   setTimeout(avanzar, reducir ? 0 : 500);
   render();

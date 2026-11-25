@@ -1,4 +1,4 @@
-import { cargar, reiniciar, sincronizar, contadores, estado } from './estado.js';
+import { cargar, reiniciar, sincronizar, contadores, estado, pregunta } from './estado.js';
 import { hoy, aplicar, llegadasSimuladas, LLEGADAS } from './hoy.js';
 import { banco } from './banco.js';
 import { simulacros } from './simulacros.js';
@@ -7,15 +7,16 @@ import { reporte } from './reporte.js';
 import { hojas, hojasPendientes } from './hojas.js';
 import { estudiante } from './simulacro.js';
 import { crear } from './crear.js';
+import { clase } from './clase.js';
 import { andrea, enWeb } from './andrea.js';
 import { login, sesion, cerrarSesion } from './login.js';
 import { iniciar as recorrido } from './tour.js';
 
-const RUTAS = { '': enWeb('hoy'), preparar: enWeb('preparar'), aplicar: enWeb('aplicar'), acompanar: enWeb('acompanar'), banco, simulacros, crear, grupo, hojas, estudiante, reporte, andrea, resumen: hoy };
+const RUTAS = { '': enWeb('hoy'), preparar: enWeb('preparar'), aplicar: enWeb('aplicar'), acompanar: enWeb('acompanar'), banco, simulacros, crear, clase, grupo, hojas, estudiante, reporte, andrea, resumen: hoy };
 
 // La tallerista piensa por momento de la semana, no por pantalla: cada momento agrupa sus pantallas en pestañas.
 const SECCIONES = {
-  preparar: [['preparar', 'Revisar'], ['crear', 'Sumar con IA, foto o Icfes'], ['simulacros', 'Armar el simulacro'], ['banco', 'Todo el banco']],
+  preparar: [['clase', 'La clase del sábado'], ['preparar', 'Revisar'], ['crear', 'Sumar con IA, foto o Icfes'], ['simulacros', 'Armar el simulacro'], ['banco', 'Todo el banco']],
   aplicar: [['aplicar', 'El simulacro de hoy'], ['hojas', 'Hojas en papel']],
   acompanar: [['acompanar', 'Esta semana'], ['grupo', 'El grupo en detalle'], ['reporte', 'Reporte para el municipio']]
 };
@@ -93,6 +94,7 @@ window.__app = {
   estado: () => estado,
   guardar: () => localStorage.setItem('impulsou-deck-v1', JSON.stringify(estado)),
   render,
+  pregunta,  // el video del deck responde con las claves reales
   recargar: async () => { await cargar(); render(); }
 };
 window.parent?.postMessage?.({ app: 'lista' }, '*');
