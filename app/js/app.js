@@ -8,15 +8,16 @@ import { hojas, hojasPendientes } from './hojas.js';
 import { estudiante } from './simulacro.js';
 import { crear } from './crear.js';
 import { clase } from './clase.js';
+import { diagnostico, roadmap } from './plan.js';
 import { andrea, enWeb } from './andrea.js';
 import { login, sesion, cerrarSesion } from './login.js';
 import { iniciar as recorrido } from './tour.js';
 
-const RUTAS = { '': enWeb('hoy'), preparar: enWeb('preparar'), aplicar: enWeb('aplicar'), acompanar: enWeb('acompanar'), banco, simulacros, crear, clase, grupo, hojas, estudiante, reporte, andrea, resumen: hoy };
+const RUTAS = { '': enWeb('hoy'), preparar: enWeb('preparar'), aplicar: enWeb('aplicar'), acompanar: enWeb('acompanar'), banco, simulacros, crear, clase, diagnostico, roadmap, grupo, hojas, estudiante, reporte, andrea, resumen: hoy };
 
 // La tallerista piensa por momento de la semana, no por pantalla: cada momento agrupa sus pantallas en pestañas.
 const SECCIONES = {
-  preparar: [['clase', 'La clase del sábado'], ['preparar', 'Revisar'], ['crear', 'Sumar con IA, foto o Icfes'], ['simulacros', 'Armar el simulacro'], ['banco', 'Todo el banco']],
+  preparar: [['diagnostico', 'Diagnóstico'], ['roadmap', 'Roadmap'], ['clase', 'La clase del sábado'], ['preparar', 'Revisar'], ['crear', 'Sumar con IA, foto o Icfes'], ['simulacros', 'Armar el simulacro'], ['banco', 'Todo el banco']],
   aplicar: [['aplicar', 'El simulacro de hoy'], ['hojas', 'Hojas en papel']],
   acompanar: [['acompanar', 'Esta semana'], ['grupo', 'El grupo en detalle'], ['reporte', 'Reporte para el municipio']]
 };

@@ -1,8 +1,7 @@
 // La clase del sábado: un agente la propone a partir de lo que el grupo falló; la tallerista la usa o la ajusta.
 // Es la misma clase que muestra la lámina «solución» del deck (clase 6, porcentajes).
-import { ic, esc, GRUPO } from './ui.js';
+import { ic, esc, GRUPO, toast } from './ui.js';
 import { areaMasBaja } from './grupo.js';
-import { prepararCrear } from './crear.js';
 
 const CLASE = {
   n: 6,
@@ -20,8 +19,8 @@ const CLASE = {
 const ROADMAP = [
   [5, 'Lectura crítica: idea principal', 'hecha'],
   [6, 'Matemáticas: porcentajes', 'sábado'],
-  [7, 'Se define con el simulacro 5', 'por definir'],
-  [8, 'Ciencias: leer gráficas', 'plan']
+  [7, 'Ciencias: leer gráficas y tablas', 'plan'],
+  [8, 'Lectura crítica: inferencias II', 'plan']
 ];
 
 let usada = false;
@@ -30,7 +29,7 @@ export function clase(el, render) {
   const bajo = areaMasBaja();
   el.innerHTML = `
   <div class="titulo">
-    <div><h1>La clase del sábado</h1><p class="sub">Clase ${CLASE.n} de 16 · grupo ${GRUPO.nombre} · la propone un agente; tú la usas o la ajustas</p></div>
+    <div><h1>La clase del sábado</h1><p class="sub">Clase ${CLASE.n} de 16 · grupo ${GRUPO.nombre} · la propone el agente de plan; tú la usas o la ajustas</p></div>
   </div>
 
   <div class="grilla g21">
@@ -43,21 +42,22 @@ export function clase(el, render) {
         <ol>${CLASE.actividades.map(([t, m]) => `<li><span>${esc(t)}</span><em>${m} min</em></li>`).join('')}</ol>
       </div>
       <div class="cl-bloque cl-man"><span class="lbl">Manejo del grupo</span><p>${esc(CLASE.manejo)}</p></div>
+      <p class="desc cl-fuente">${ic('libro', 13)} Se apoya en simulacros liberados del Icfes, la descripción de las competencias del examen y material de didáctica y manejo de grupos.</p>
       <div class="acciones">
         <button class="btn primario" data-acc="usar">${usada ? `${ic('ok', 16)} Lista para el sábado` : 'Usar esta clase'}</button>
-        <button class="btn" data-acc="practica">${ic('chispa', 16)} Práctica con material del colectivo</button>
+        <button class="btn" data-acc="practica">${ic('chispa', 16)} Pedir un ajuste</button>
       </div>
     </div>
     <div class="card suave cl-roadmap" style="align-self:start">
       <h2>Roadmap del ciclo</h2>
       <p class="desc">Cada simulacro ajusta las clases que vienen</p>
       <ul class="cl-ruta">${ROADMAP.map(([n, t, e]) => `
-        <li class="${e === 'sábado' ? 'ahora' : e === 'hecha' ? 'hecha' : ''}"><span class="n">${n}</span><div><b>${esc(t)}</b><span class="desc">${e === 'hecha' ? 'Hecha' : e === 'sábado' ? 'Este sábado' : e === 'por definir' ? 'Según lo que falle el grupo' : 'Planeada'}</span></div></li>`).join('')}
+        <li class="${e === 'sábado' ? 'ahora' : e === 'hecha' ? 'hecha' : ''}"><span class="n">${n}</span><div><b>${esc(t)}</b><span class="desc">${e === 'hecha' ? 'Hecha' : e === 'sábado' ? 'Este sábado' : 'Planeada'}</span></div></li>`).join('')}
       </ul>
       <p class="desc" style="font-size:13px;margin-top:10px">El roadmap y las clases quedan en el colectivo aunque cambie la tallerista.</p>
     </div>
   </div>`;
 
   el.querySelector('[data-acc="usar"]').addEventListener('click', () => { usada = true; render(); });
-  el.querySelector('[data-acc="practica"]').addEventListener('click', () => { prepararCrear(bajo.area); location.hash = '#/crear'; });
+  el.querySelector('[data-acc="practica"]').addEventListener('click', () => toast('El agente rehace la clase con tu pedido'));
 }

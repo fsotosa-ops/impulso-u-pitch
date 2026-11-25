@@ -18,10 +18,9 @@ const VE = { tallerista: 'Lo que ve la tallerista · Andrea', estudiante: 'Lo qu
 function mirar(lam, quien) {
   const p = lam.querySelector('.ve-pill');
   if (p) { p.dataset.ve = quien; p.textContent = VE[quien]; }
-  const otro = quien === 'tallerista' ? 'tel' : 'and';
-  lam.querySelectorAll('[data-app]').forEach(d => d.classList.toggle('apagado', d.dataset.app === otro));
-  const rot = [...lam.querySelectorAll('.quien-dev')];
-  if (rot.length === 2) rot.forEach((r, k) => r.classList.toggle('apagado', (k === 1) === (quien === 'tallerista')));
+  const apagar = app => (app === 'tel') !== (quien === 'estudiante');
+  lam.querySelectorAll('[data-app]').forEach(d => d.classList.toggle('apagado', apagar(d.dataset.app)));
+  lam.querySelectorAll('.quien-dev[data-de]').forEach(r => r.classList.toggle('apagado', apagar(r.dataset.de)));
 }
 const numero = el => (el.textContent.match(/\d[\d.,]*/) || [''])[0];
 
@@ -209,93 +208,71 @@ window.ESCENAS = {
   },
 
   // ---------- Video de la demo: una escena por momento de la semana. grabar_video.py dispara los pasos con la voz.
-  vDiagnosticar: {
-    async preparar({ lap }) { fijar(lap, e => { e.cuenta = CUENTA(); publicar(e, 3600000); }); await ir(lap, '#/grupo', 600); },
-    pasos: [
-      async ({ lap }, lam, H) => H.rotulo(lam, lap, '.barras .r.bajo', { dato: el => `${numero(el.querySelector('.v'))} %`, texto: 'de aciertos en Matemáticas: el área más baja, sumando celulares y hojas en papel.', lado: 'der', ancho: 380, dx: 300 })
-    ]
-  },
-  vPlanear: {
-    async preparar({ lap }) { lap.win.__videoRapido = true; fijar(lap, e => { e.cuenta = CUENTA(); e.simulacro.publicado = null; }); await ir(lap, '#/clase', 600); },
-    pasos: [
-      async ({ lap }, lam, H) => H.rotulo(lam, lap, '.cl-motivo', { texto: 'La clase sale del diagnóstico: objetivo, actividades y manejo del grupo.', lado: 'der', ancho: 380, dx: 330 }),
-      async ({ lap }, lam, H) => {
-        await H.clic(lam, lap, '[data-acc="practica"]', 500);
-        await H.espera(300);
-        await H.clic(lam, lap, '[data-ej="transporte"]', 400);
-        for (let n = 0; n < 60 && !lap.doc.querySelector('.prop-cab'); n++) await H.espera(100);
-        lap.doc.querySelector('.prop-cab')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        await H.espera(700);
-        H.rotulo(lam, lap, '.prop-cab h2', { texto: 'Con la tabla de pasajes del colectivo, la IA propone 4 preguntas de porcentajes.', lado: 'der', ancho: 380, dx: 330 });
-      },
-      async ({ lap }, lam, H) => {
-        lap.doc.querySelector('.atajos-ia')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        await H.espera(500);
-        await H.clic(lam, lap, '[data-aj="facil"]', 400);
-        lap.doc.querySelector('.prop-cab')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        await H.espera(500);
-        await H.clic(lam, lap, '[data-acc="todas"]', 400);
-        H.rotulo(lam, lap, '[data-acc="guardar"]', { texto: 'Más fácil, con una pista por pregunta. Nada llega al grupo sin aprobación.', lado: 'der', ancho: 360, dx: 60 });
-      }
-    ]
-  },
-  vAplicar: {
-    async preparar({ and, tel }, lam) {
-      fijar(and, e => { e.cuenta = CUENTA(); e.simulacro.publicado = null; e.simulacro.codigo = null; e.intento = null; e.cola = []; e.servidor = []; e.avion = false; });
-      await recargar(tel);
-      await ir(and, '#/andrea?p=aplicar', 500);
-      await ir(tel, '#/estudiante', 400);
-      mirar(lam, 'tallerista');
+  // ---------- Video de la demo: los cinco pasos de la solución (demo/prompt-solucion-impulsou.md).
+  vDiagnostico: {
+    async preparar({ tel, lap }, lam) {
+      // Simulacro 1 = el diagnóstico. Laura ya va en la pregunta 9 de 10.
+      fijar(lap, e => {
+        e.cuenta = CUENTA(); e.simulacro = { ...e.simulacro, numero: 1 }; publicar(e, 600000);
+        e.servidor = []; e.cola = []; e.avion = false;
+        const ids = e.simulacro.ids;
+        e.intento = { simulacro: 1, i: ids.length - 2, respuestas: Object.fromEntries(ids.slice(0, -2).map(id => [id, 0])), vuelta: 1 };
+      });
+      await recargar(tel); await recargar(lap);
+      await ir(tel, `#/estudiante?c=${CODIGO}`, 500);
+      if (tel.doc.querySelector('[data-c="entrar"]')) tel.doc.querySelector('[data-c="entrar"]').click();
+      await ir(lap, '#/hojas', 300);
+      mirar(lam, 'estudiante');
     },
     pasos: [
-      async ({ and }, lam, H) => {
-        await H.clic(lam, and, '[data-acc="publicar"]', 600);
-        H.rotulo(lam, and, '.a-codigo', { texto: 'Un código para el grupo. Cero fotocopias.', lado: 'izq', ancho: 340 });
-      },
       async ({ tel }, lam, H) => {
-        mirar(lam, 'estudiante');
-        await recargar(tel);
-        await ir(tel, `#/estudiante?c=${CODIGO}`, 500);
-        if (tel.doc.querySelector('[data-c="entrar"]')) await H.clic(lam, tel, '[data-c="entrar"]', 350);
-        await H.espera(150);
-        // Laura ya va en la pregunta 7: ahí se va la señal y responde las últimas sin conexión.
-        // Responde con las claves reales y falla 3: termina con 7 de 10, como en el puente de la lámina demo.
-        const ids = tel.win.__app.estado().simulacro.ids, n = ids.length, desde = n - 4;
-        const resp = q => { const c = tel.win.__app.pregunta(ids[q]).clave; return [1, 4, 8].includes(q) ? (c + 1) % 4 : c; };
-        fijar(tel, e => { e.intento = { simulacro: e.simulacro.numero, i: desde, respuestas: Object.fromEntries([...Array(desde).keys()].map(q => [ids[q], resp(q)])), vuelta: 1 }; });
-        await H.espera(250);
-        await H.clic(lam, tel, '.barra-estado [data-c="avion"]', 400);
-        for (let q = desde; q < n; q++) {
-          tel.doc.querySelector(`[data-r="${resp(q)}"]`)?.click();
-          await H.espera(150);
+        for (let q = 0; q < 2; q++) {
+          await H.clic(lam, tel, '[data-r="1"]', 250);
           tel.doc.querySelector('[data-c="sig"]')?.click();
-          await H.espera(180);
+          await H.espera(300);
         }
         await H.espera(300);
-        H.rotulo(lam, tel, '.sync', { dato: 'Sin señal', texto: 'Terminó igual: las respuestas quedan en el celular.', lado: 'der', ancho: 340 });
+        H.rotulo(lam, tel, 'p b', { texto: 'Laura lo responde en su celular.', lado: 'der', ancho: 300 });
       },
-      async ({ tel, and }, lam, H) => {
-        await H.clic(lam, tel, '.barra-estado [data-c="avion"]', 400);
-        await H.espera(700);
-        H.rotulo(lam, tel, '.aviso-red', { dato: '0', texto: 'respuestas perdidas al volver la señal', lado: 'der', ancho: 320 });
-        await recargar(and);
+      async ({ lap }, lam, H) => {
+        mirar(lam, 'tallerista');
+        await H.clic(lam, lap, '[data-acc="foto"]', 450);
+        await H.espera(300);
+        H.rotulo(lam, lap, '.lectura', { dato: el => lap.doc.querySelector('.hoja .etiqueta')?.textContent.replace('Confianza ', '') || '', texto: 'de confianza: el OCR lee las marcas de la hoja en papel.', lado: 'aba', ancho: 380 });
       }
     ]
   },
-  vAcompanar: {
-    async preparar({ and }) {
-      fijar(and, e => { e.cuenta = CUENTA(); publicar(e, 3600000); });
-      await ir(and, '#/andrea?p=acompanar', 600);
-    },
+  vDebilidades: {
+    async preparar({ lap }) { fijar(lap, e => { e.cuenta = CUENTA(); }); await ir(lap, '#/diagnostico', 500); },
     pasos: [
-      async ({ and }, lam, H) => {
-        await H.clic(lam, and, '.a-personas li:first-child [data-acc="contactar"]', 700);
-        H.rotulo(lam, and, '.a-personas li:first-child', { texto: 'Con nombre: a quién contactar antes de que abandone.', lado: 'der', ancho: 380 });
-      },
-      async ({ and }, lam, H) => {
-        and.doc.querySelector('.a-cuerpo')?.scrollTo({ top: 400, behavior: 'smooth' });
-        await H.espera(700);
-        H.rotulo(lam, and, '[data-acc="refuerzo"]', { texto: 'Lo que el grupo falló el sábado ajusta la clase 7 del roadmap.', lado: 'der', ancho: 380 });
+      async ({ lap }, lam, H) => H.rotulo(lam, lap, '.dg-agente', { texto: 'Compara cada respuesta con lo que evalúan el Saber 11 y la admisión.', lado: 'der', ancho: 380, dx: -40 }),
+      async ({ lap }, lam, H) => H.rotulo(lam, lap, '.dg-tabla tr.top', { dato: '60 %', texto: 'del grupo falla porcentajes: un conocimiento, en la competencia de formulación.', lado: 'der', ancho: 380, dx: -60 })
+    ]
+  },
+  vRoadmap: {
+    async preparar({ lap }) { fijar(lap, e => { e.cuenta = CUENTA(); }); await ir(lap, '#/roadmap', 500); },
+    pasos: [
+      async ({ lap }, lam, H) => H.rotulo(lam, lap, '.rm-entradas', { texto: '16 clases y 50 estudiantes: con eso ordena el curso.', lado: 'der', ancho: 330, dx: -40 }),
+      async ({ lap }, lam, H) => H.rotulo(lam, lap, '.rm-lista li.sabado', { texto: 'La clase 6 ataca la debilidad más alta: porcentajes.', lado: 'der', ancho: 330, dx: -40 })
+    ]
+  },
+  vClase: {
+    async preparar({ lap }) { fijar(lap, e => { e.cuenta = CUENTA(); }); await ir(lap, '#/clase', 500); },
+    pasos: [
+      async ({ lap }, lam, H) => H.rotulo(lam, lap, '.cl-act', { texto: 'Objetivo, actividades con su tiempo y manejo del grupo.', lado: 'der', ancho: 340, dx: 330 }),
+      async ({ lap }, lam, H) => {
+        await H.clic(lam, lap, '[data-acc="usar"]', 450);
+        H.rotulo(lam, lap, '.cl-fuente', { texto: 'Apoyada en simulacros liberados del Icfes y material de manejo de grupos.', lado: 'der', ancho: 340, dx: 330 });
+      }
+    ]
+  },
+  vAjuste: {
+    async preparar({ lap }) { fijar(lap, e => { e.cuenta = CUENTA(); }); await ir(lap, '#/roadmap', 500); },
+    pasos: [
+      async ({ lap }, lam, H) => {
+        await H.clic(lam, lap, '[data-acc="ajustar"]', 600);
+        await H.espera(400);
+        H.rotulo(lam, lap, '.rm-lista li.nueva', { texto: 'Porcentajes sigue bajo la meta: la clase 7 lo refuerza.', lado: 'der', ancho: 330, dx: -40 });
       }
     ]
   },
